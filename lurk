@@ -31,7 +31,7 @@ local function _Init()
 
     local s, d = pcall(game.HttpGet, game, _Link1)
     if not s or d == "" then
-        _Nt("Config Error (Pastebin)")
+        _Nt("Config Error")
         return
     end
 
@@ -39,7 +39,7 @@ local function _Init()
     local u = _Cl(sp[1])
     local r = _Cl(sp[2])
 
-    local fullUrl = _Link2 .. u .. "/" .. r .. "/main/" .. fName
+    local fullUrl = _Link2 .. u .. "/" .. r .. "/" .. fName
     
     local sc, res = pcall(game.HttpGet, game, fullUrl)
 
@@ -49,11 +49,11 @@ local function _Init()
             _Nt("Successfully Loaded")
             exe()
         else
-            _Nt("Script Syntax Error")
+            _Nt("Script Error")
             warn(err)
         end
     else
-        _Nt("Download Error (404)")
+        _Nt("404 Error")
         warn("Failed URL: " .. fullUrl)
     end
 end
