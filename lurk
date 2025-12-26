@@ -1,60 +1,42 @@
-local StarterGui = game:GetService("StarterGui")
-local PlaceId = game.PlaceId
-
-local _Link1 = string.char(104,116,116,112,115,58,47,47,112,97,115,116,101,98,105,110,46,99,111,109,47,114,97,119,47,88,90,88,76,65,101,115,54)
-local _Link2 = string.char(104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47)
-
 local _GList = {
     [142823291] = "MM2.lua"
 }
 
-local function _Nt(txt)
-    pcall(function()
-        StarterGui:SetCore("SendNotification", {
-            Title = "Loader",
-            Text = txt,
-            Duration = 4
-        })
-    end)
-end
-
-local function _Cl(s)
-    return s:gsub(string.char(91,37,115,92,114,92,110,93), "")
-end
+local _L = {
+    [1] = string.char(104,116,116,112,115,58,47,47,112,97,115,116,101,98,105,110,46,99,111,109,47,114,97,119,47,88,90,88,76,65,101,115,54),
+    [2] = string.char(104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47),
+    [3] = string.char(109,97,105,110),
+    [4] = string.char(83,116,97,114,116,101,114,71,117,105),
+    [5] = string.char(83,101,110,100,78,111,116,105,102,105,99,97,116,105,111,110),
+    [6] = string.char(91,37,115,92,114,92,110,93)
+}
 
 local function _Init()
-    local fName = _GList[PlaceId]
-    if not fName then 
-        _Nt("Game not supported")
-        return 
-    end
+    local f = _GList[game.PlaceId]
+    if not f then return end
 
-    local s, d = pcall(game.HttpGet, game, _Link1)
-    if not s or d == "" then
-        _Nt("Config Error")
-        return
-    end
+    local s, d = pcall(game.HttpGet, game, _L[1])
+    if not s or d == "" then return end
 
+    local function _C(v) return v:gsub(_L[6], "") end
     local sp = string.split(d, "\n")
-    local u = _Cl(sp[1])
-    local r = _Cl(sp[2])
+    local u, r = _C(sp[1]), _C(sp[2])
 
-    local fullUrl = _Link2 .. u .. "/" .. r .. "/" .. fName
-    
-    local sc, res = pcall(game.HttpGet, game, fullUrl)
+    local url = _L[2] .. u .. "/" .. r .. "/" .. _L[3] .. "/" .. f
+    local sc, res = pcall(game.HttpGet, game, url)
 
     if sc and res ~= "404: Not Found" then
-        local exe, err = loadstring(res)
+        local exe = loadstring(res)
         if exe then
-            _Nt("Successfully Loaded")
+            pcall(function()
+                game:GetService(_L[4]):SetCore(_L[5], {
+                    Title = "Loader",
+                    Text = "Success",
+                    Duration = 5
+                })
+            end)
             exe()
-        else
-            _Nt("Script Error")
-            warn(err)
         end
-    else
-        _Nt("404 Error")
-        warn("Failed URL: " .. fullUrl)
     end
 end
 
